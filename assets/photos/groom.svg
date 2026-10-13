@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" role="img" aria-label="Placeholder artwork for the groom — a gold R monogram inside a botanical arch">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%" r="90%">
+      <stop offset="0%" stop-color="#F8F4EC"/>
+      <stop offset="100%" stop-color="#F1EAE0"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#bg)"/>
+  <!-- outer frame -->
+  <rect x="14" y="14" width="272" height="372" rx="18" fill="none" stroke="#C8A96B" stroke-width="2"/>
+  <rect x="22" y="22" width="256" height="356" rx="14" fill="none" stroke="#C8A96B" stroke-width=".8" opacity=".55"/>
+  <!-- botanical arch, rose + sage line art -->
+  <g fill="none" stroke="#C9A6A6" stroke-width="2.4" stroke-linecap="round">
+    <path d="M70 340 V180 C70 96 118 52 150 52 C182 52 230 96 230 180 V340"/>
+  </g>
+  <g fill="none" stroke="#C9A6A6" stroke-width="1.2" stroke-linecap="round" opacity=".6">
+    <path d="M84 340 V186 C84 112 126 66 150 66 C174 66 216 112 216 186 V340"/>
+  </g>
+  <g fill="none" stroke="#93A38B" stroke-width="1.8" stroke-linecap="round">
+    <path d="M150 52 C146 40 146 32 150 22 C154 32 154 40 150 52"/>
+    <path d="M150 36 C142 30 132 28 122 32 C126 42 136 46 148 44"/>
+    <path d="M150 36 C158 30 168 28 178 32 C174 42 164 46 152 44"/>
+    <path d="M70 240 C56 234 48 224 46 210 C60 214 68 224 72 236"/>
+    <path d="M230 240 C244 234 252 224 254 210 C240 214 232 224 228 236"/>
+  </g>
+  <g fill="none" stroke="#93A38B" stroke-width="1.4" stroke-linecap="round" opacity=".8">
+    <path d="M100 300 C88 294 82 284 82 272 C94 276 100 286 102 296"/>
+    <path d="M200 300 C212 294 218 284 218 272 C206 276 200 286 198 296"/>
+  </g>
+  <!-- four-point stars -->
+  <g fill="#C8A96B">
+    <path d="M150 96 C152 108 157 113 169 115 C157 117 152 122 150 134 C148 122 143 117 131 115 C143 113 148 108 150 96 Z"/>
+    <path d="M86 130 C87 137 90 140 97 141 C90 142 87 145 86 152 C85 145 82 142 75 141 C82 140 85 137 86 130 Z" opacity=".8"/>
+    <path d="M214 130 C215 137 218 140 225 141 C218 142 215 145 214 152 C213 145 210 142 203 141 C210 140 213 137 214 130 Z" opacity=".8"/>
+  </g>
+  <!-- monogram disc -->
+  <circle cx="150" cy="212" r="62" fill="#FDFBF5" stroke="#C8A96B" stroke-width="1.6"/>
+  <circle cx="150" cy="212" r="55" fill="none" stroke="#C8A96B" stroke-width=".7" opacity=".6"/>
+  <text x="150" y="238" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="78" fill="#5A1F2B">R</text>
+  <path d="M150 296 C151.5 305 155 308.5 164 310 C155 311.5 151.5 315 150 324 C148.5 315 145 311.5 136 310 C145 308.5 148.5 305 150 296 Z" fill="#C8A96B" opacity=".85"/>
+  <text x="150" y="366" text-anchor="middle" font-family="Georgia, serif" font-size="12" letter-spacing="6" fill="#9C7F4C">GROOM</text>
+</svg>
