@@ -104,10 +104,10 @@ const INVITE_CONFIG = {
   },
 
   /* ---------- RSVP ----------
-     Replies are remembered in the guest's own browser
-     (localStorage) so a returning guest can update their reply.
-     They are NOT sent anywhere — see the README if you need
-     delivery to the couple (WhatsApp / Formspree).
+   Replies are remembered in the guest's own browser
+   (localStorage) so a returning guest can update their reply.
+   whatsapp sends the prefilled reply to this international number
+   (digits only, no +) via WhatsApp; guests still press Send there.
      maxParty caps the guests stepper.
      songRequest adds the optional song-request field when true;
      it ships false — there is no song field by default.        */
@@ -115,6 +115,7 @@ const INVITE_CONFIG = {
     storageKey: "rt_rsvp_v1",
     maxParty: 8,
     songRequest: false,
+    whatsapp: "8801712345678",
   },
 };
 

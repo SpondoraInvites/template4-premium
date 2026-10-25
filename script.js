@@ -29,11 +29,12 @@ const T={
   en:{
     acceptBody:(n,g)=>`Your reply has reached us with joy, ${n}. In shaa Allah, we will keep seats for your party of ${WORDS[g]}.`,
     declineBody:()=>`You will be dearly missed — but your blessings travel with us. Thank you for letting us know.`,
-    toastSaved:"Your reply has been received — thank you",
+    toastSaved:"WhatsApp opened with your reply — please press Send",
     toastDeclined:"Thank you for letting us know",
     toastCalendar:"Calendar file downloaded — see you soon, In shaa Allah",
     toastCopied:"Invitation link copied — thank you for sharing",
     toastNameFirst:"Please tell us your name first",
+    sentBody:()=>"WhatsApp opened with your reply — please press Send to deliver it.",
     phase:{
       nikah:{title:"until the Nikah, In shaa Allah",cap:"…until the Nikah begins"},
       walima:{title:"until the Walima, In shaa Allah",cap:"…until the Walima begins"},
@@ -42,11 +43,12 @@ const T={
   bn:{
     acceptBody:(n,g)=>`আপনার উত্তর আনন্দের সাথে পৌঁছেছে, ${n}। ইনশাআল্লাহ, আপনাদের ${bnNum(g)} জনের আসন রাখা হবে।`,
     declineBody:()=>`আপনাকে আমরা মিস করব — কিন্তু আপনার দোয়া আমাদের সাথেই থাকবে। জানিয়ে দেওয়ার জন্য ধন্যবাদ।`,
-    toastSaved:"আপনার উত্তর পৌঁছেছে — ধন্যবাদ",
+    toastSaved:"আপনার উত্তরসহ WhatsApp খোলা হয়েছে — পাঠাতে Send চাপুন",
     toastDeclined:"জানিয়ে দেওয়ার জন্য ধন্যবাদ",
     toastCalendar:"ক্যালেন্ডার ফাইল ডাউনলোড হয়েছে — ইনশাআল্লাহ দেখা হবে",
     toastCopied:"দাওয়াতের লিংক কপি হয়েছে — শেয়ার করার জন্য ধন্যবাদ",
     toastNameFirst:"অনুগ্রহ করে আপনার নাম লিখুন",
+    sentBody:()=>"আপনার উত্তরসহ WhatsApp খোলা হয়েছে — পাঠাতে Send চাপুন।",
     phase:{
       nikah:{title:"নিকাহ পর্যন্ত, ইনশাআল্লাহ",cap:"…নিকাহ শুরু হওয়া পর্যন্ত"},
       walima:{title:"ওয়ালিমা পর্যন্ত, ইনশাআল্লাহ",cap:"…ওয়ালিমা শুরু হওয়া পর্যন্ত"},
@@ -250,6 +252,19 @@ const form=$("#rsvpForm"),nameI=$("#fName"),nameField=$("#nameField"),
       ifAtt=form.querySelector(".if-att");
 const MAX=CFG.rsvp.maxParty||8;
 
+function whatsappUrl(data){
+  const attending=data.att==="yes";
+  const lines=[
+    "RSVP — Rafi weds Tahmina",
+    "Name: "+data.n,
+    attending?"Attending: Joyfully, yes":"Attending: Regretfully, no",
+  ];
+  if(attending)lines.push("Guests: "+data.g);
+  if(data.notes)lines.push("Blessings or dietary notes: "+data.notes);
+  if(data.song)lines.push("Song request: "+data.song);
+  return "https://wa.me/"+CFG.rsvp.whatsapp.replace(/[^\d]/g,"")+"?text="+encodeURIComponent(lines.join("\n"));
+}
+
 /* the optional song-request field ships hidden; config turns it on */
 if(CFG.rsvp.songRequest){const w=$("#fSongWrap");if(w)w.hidden=false;}
 
@@ -279,14 +294,15 @@ form.addEventListener("submit",e=>{
     notes:$("#fNotes").value.trim(),ts:Date.now()};
   if(CFG.rsvp.songRequest)data.song=$("#fSong").value.trim();
   try{localStorage.setItem(LS,JSON.stringify(data));}catch(_){}
+  if(CFG.rsvp.whatsapp)window.open(whatsappUrl(data),"_blank","noopener");
   cName.textContent=n.split(" ")[0];
-  cBody.textContent=data.att==="yes"
+  cBody.textContent=CFG.rsvp.whatsapp?T[lang()].sentBody():data.att==="yes"
     ?T[lang()].acceptBody(n,data.g)
     :T[lang()].declineBody();
   form.hidden=true;
   savedNote.hidden=true;
   confirmEl.classList.add("show");
-  toast(data.att==="yes"?T[lang()].toastSaved:T[lang()].toastDeclined);
+  toast(CFG.rsvp.whatsapp?T[lang()].toastSaved:data.att==="yes"?T[lang()].toastSaved:T[lang()].toastDeclined);
 });
 $("#editReply").addEventListener("click",()=>{
   confirmEl.classList.remove("show");form.hidden=false;savedNote.hidden=false;
