@@ -27,6 +27,7 @@
     #overlay{display:none}
     nav{opacity:1!important;pointer-events:auto!important}
     #langBtn,#themeBtn{display:none!important}
+    .share,.float-share{display:none!important}
     .reveal,[data-st]{opacity:1!important;transform:none!important}
     img[data-photo]:not([src]){display:none}
   </style>
@@ -51,6 +52,7 @@
   <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.3 3.8 5.2 3.8 8.5s-1.3 6.2-3.8 8.5c-2.5-2.3-3.8-5.2-3.8-8.5s1.3-6.2 3.8-8.5z"/></g></symbol>
   <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="2.6" fill="currentColor"/><circle cx="18" cy="16" r="2.6" fill="currentColor"/></symbol>
   <symbol id="i-note-off" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="2.6" fill="currentColor"/><circle cx="18" cy="16" r="2.6" fill="currentColor"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="12" r="2.6"/><circle cx="17.5" cy="5.6" r="2.6"/><circle cx="17.5" cy="18.4" r="2.6"/><path d="M8.4 10.8 L15.1 6.8 M8.4 13.2 L15.1 17.2"/></g></symbol>
   <symbol id="i-sprig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M12 21V6"/><path d="M12 10c-2.6-.4-4.2-2-4.8-4.6C9.8 1.8 11.4 3.4 12 6"/><path d="M12 10c2.6-.4 4.2-2 4.8-4.6C14.2 5.8 12.6 7.4 12 10" transform="translate(0 -2)"/><path d="M12 15c-2.6-.4-4.2-2-4.8-4.6"/><path d="M12 15c2.6-.4 4.2-2 4.8-4.6"/></g></symbol>
 </svg>
 
@@ -375,6 +377,21 @@
           <svg class="ic"><use href="#i-cal"/></svg><span><span class="en">Add to calendar</span><span class="bn">ক্যালেন্ডারে যোগ করুন</span></span>
         </button>
       </div>
+
+      <!-- Share — opens the channel pill menu below (wired by script.js § 11;
+           the menu ships hidden so noscript shows nothing to interact with) -->
+      <div class="share reveal" style="--d:.35s">
+        <button class="btn" id="shareBtn" aria-expanded="false" aria-controls="shareMenu">
+          <svg class="ic"><use href="#i-share"/></svg><span><span class="en">Share this invitation</span><span class="bn">দাওয়াত শেয়ার করুন</span></span>
+        </button>
+        <div class="share-menu" id="shareMenu" hidden>
+          <button type="button" data-share="copy"><span class="en">Copy link</span><span class="bn">লিংক কপি করুন</span></button>
+          <button type="button" data-share="whatsapp">WhatsApp</button>
+          <button type="button" data-share="messenger">Messenger</button>
+          <button type="button" data-share="telegram">Telegram</button>
+          <button type="button" data-share="email"><span class="en">Email</span><span class="bn">ইমেইল</span></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -502,6 +519,21 @@
     </div>
   </div>
 </footer>
+
+<!-- ============ Floating share — appears once the hero scrolls out of view;
+     sits above the floating sound button in the bottom-right corner ============ -->
+<div class="float-share">
+  <div class="share-menu share-menu--float" id="shareMenuFloat" hidden>
+    <button type="button" data-share="copy"><span class="en">Copy link</span><span class="bn">লিংক কপি করুন</span></button>
+    <button type="button" data-share="whatsapp">WhatsApp</button>
+    <button type="button" data-share="messenger">Messenger</button>
+    <button type="button" data-share="telegram">Telegram</button>
+    <button type="button" data-share="email"><span class="en">Email</span><span class="bn">ইমেইল</span></button>
+  </div>
+  <button class="fs-btn" id="shareFloatBtn" aria-expanded="false" aria-controls="shareMenuFloat" aria-label="Share this invitation" title="Share this invitation">
+    <svg class="ic"><use href="#i-share"/></svg>
+  </button>
+</div>
 
 <!-- Floating ambient-sound button is created by audio.js (removable layer). -->
 <div id="toasts" aria-live="polite"></div>

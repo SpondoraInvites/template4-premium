@@ -347,11 +347,31 @@ body.revealed .sound-btn{opacity:1;pointer-events:auto;transform:none}
 .sound-btn.is-off .on{display:none}
 .sound-btn:hover{border-color:var(--gold-deep)}
 
+/* ============ Share ============ */
+/* Two triggers pair with two pill menus (see script.js § 11): the venue
+   section opens a dropdown beneath its button; the floating wrapper at
+   bottom-right (above the sound button) opens a column of pills upward,
+   and shows itself once the hero has scrolled out of view. */
+.share{position:relative;display:flex;justify-content:center;margin-top:1.1rem}
+.share-menu{position:absolute;top:calc(100% + .7rem);left:50%;transform:translate(-50%,-8px) scale(.96);display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;padding:.7rem .75rem;border:1px solid var(--line);background:var(--surface);border-radius:999px;box-shadow:var(--shadow);z-index:70;width:max-content;max-width:min(92vw,430px);opacity:0;visibility:hidden;transition:opacity .26s ease,transform .36s cubic-bezier(.2,.8,.25,1),visibility 0s linear .36s}
+.share-menu.open{opacity:1;visibility:visible;transform:translate(-50%,0) scale(1);transition:opacity .26s ease,transform .36s cubic-bezier(.2,.8,.25,1)}
+.share-menu button{display:inline-flex;align-items:center;font-family:var(--body);font-size:.64rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:.62em 1.1em;cursor:pointer;transition:background .25s,color .25s,border-color .25s,box-shadow .25s,transform .25s ease}
+.share-menu button:hover,.share-menu button:focus-visible{background:var(--btn-bg);color:var(--btn-text);border-color:var(--gold);box-shadow:0 5px 12px -7px rgba(67,22,31,.55);transform:translateY(-2px)}
+
+/* floating share */
+.float-share{position:fixed;right:1rem;bottom:4.35rem;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem;opacity:0;visibility:hidden;transform:translateY(10px);pointer-events:none;transition:opacity .5s ease,transform .5s ease,visibility 0s linear .5s}
+.float-share.show{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .5s ease,transform .5s ease}
+.fs-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line-strong);background:var(--nav-bg);backdrop-filter:blur(8px);color:var(--burgundy);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-soft);padding:0;transition:background .45s,color .45s}
+.fs-btn .ic{width:19px;height:19px}
+.fs-btn:hover{border-color:var(--gold-deep)}
+.share-menu--float{position:static;flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:.4rem;padding:.8rem .75rem;border-radius:18px;transform:translateY(8px) scale(.96)}
+.share-menu--float.open{transform:translateY(0) scale(1)}
+
 #toasts{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);z-index:90;display:grid;gap:.5rem;justify-items:center;width:max-content;max-width:92vw}
-.toast{display:flex;align-items:center;gap:.6rem;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:.75rem 1.15rem;font-size:.86rem;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s}
+.toast{display:flex;align-items:center;gap:.6rem;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:.75rem 1.15rem;font-size:.86rem;opacity:0;transform:translateY(12px) scale(.96);transition:opacity .32s ease,transform .42s cubic-bezier(.2,.8,.25,1)}
 .toast .star{color:var(--gold-deep)}
-.toast.show{opacity:1;transform:none}
-.toast.hide{opacity:0;transform:translateY(-8px)}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast.hide{opacity:0;transform:translateY(-8px) scale(.98)}
 
 /* ============ Reveals ============ */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .85s ease var(--d,0s),transform .85s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
@@ -363,6 +383,9 @@ body.revealed [data-st]{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  /* Keep brief, non-looping feedback for sharing controls; without this,
+     opening a menu, hovering a channel, and copy confirmation feel instant. */
+  .share-menu,.share-menu button,.toast{transition-duration:.22s!important}
   .reveal,[data-st]{opacity:1;transform:none;transition:none}
   .scroll-cue .line::after{animation:none}
 }

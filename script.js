@@ -32,6 +32,7 @@ const T={
     toastSaved:"Your reply has been received — thank you",
     toastDeclined:"Thank you for letting us know",
     toastCalendar:"Calendar file downloaded — see you soon, In shaa Allah",
+    toastCopied:"Invitation link copied — thank you for sharing",
     toastNameFirst:"Please tell us your name first",
     phase:{
       nikah:{title:"until the Nikah, In shaa Allah",cap:"…until the Nikah begins"},
@@ -44,6 +45,7 @@ const T={
     toastSaved:"আপনার উত্তর পৌঁছেছে — ধন্যবাদ",
     toastDeclined:"জানিয়ে দেওয়ার জন্য ধন্যবাদ",
     toastCalendar:"ক্যালেন্ডার ফাইল ডাউনলোড হয়েছে — ইনশাআল্লাহ দেখা হবে",
+    toastCopied:"দাওয়াতের লিংক কপি হয়েছে — শেয়ার করার জন্য ধন্যবাদ",
     toastNameFirst:"অনুগ্রহ করে আপনার নাম লিখুন",
     phase:{
       nikah:{title:"নিকাহ পর্যন্ত, ইনশাআল্লাহ",cap:"…নিকাহ শুরু হওয়া পর্যন্ত"},
@@ -303,5 +305,90 @@ try{
   }
 }catch(_){}
 updateAtt();
+
+/* =========================================================
+   11. Share — pass the invitation along (copy / WhatsApp /
+   Messenger / Telegram / email). The venue button and the
+   floating bottom-right button both open a channel pill
+   menu; the floating one appears once the hero scrolls out
+   of view. No backend: channels are prefilled URLs, and
+   copying falls back to execCommand when the Clipboard API
+   is unavailable (plain http).
+   ========================================================= */
+(function initShare(){
+  const link=()=>location.href.split("#")[0]; /* strip any in-page anchor */
+  const text=()=>(CFG.share&&CFG.share.message)||document.title;
+  const enc=encodeURIComponent;
+  const copyLink=async copyBtn=>{
+    try{await navigator.clipboard.writeText(link());}
+    catch(_){ /* Clipboard API needs a secure context — fall back */
+      const ta=document.createElement("textarea");
+      ta.value=link();ta.style.position="fixed";ta.style.opacity="0";
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy");}catch(_){}
+      ta.remove();
+    }
+    toast(T[lang()].toastCopied);
+    if(copyBtn){ /* brief copied state on the pill, easing after the toast */
+      const cur=copyBtn.innerHTML;
+      copyBtn.innerHTML='<span class="en">Copied ✓</span><span class="bn">কপি হয়েছে ✓</span>';
+      setTimeout(()=>{copyBtn.innerHTML=cur;},1600);
+    }
+  };
+  const actions={
+    copy:button=>copyLink(button),
+    whatsapp:()=>open("https://wa.me/?text="+enc(text()+"\n"+link()),"_blank","noopener"),
+    /* shortcut: deep link only opens the Messenger app (mobile); the desktop
+       web dialog needs a registered Facebook app ID */
+    messenger:()=>open("fb-messenger://share/?link="+enc(link()),"_blank","noopener"),
+    telegram:()=>open("https://t.me/share/url?url="+enc(link())+"&text="+enc(text()),"_blank","noopener"),
+    email:()=>{location.href="mailto:?subject="+enc(text())+"&body="+enc(text()+"\n"+link());},
+  };
+  const pairs=[];
+  [["#shareBtn","#shareMenu"],["#shareFloatBtn","#shareMenuFloat"]].forEach(pair=>{
+    const b=$(pair[0]),menu=$(pair[1]);
+    if(!b||!menu)return;
+    menu.hidden=false; /* JS is healthy — the class system takes over from [hidden] */
+    const setOpen=op=>{
+      menu.classList.toggle("open",op);
+      b.setAttribute("aria-expanded",String(op));
+    };
+    b.addEventListener("click",()=>{
+      const wasOpen=menu.classList.contains("open");
+      pairs.forEach(p=>p.setOpen(false));
+      if(!wasOpen)setOpen(true);
+    });
+    menu.querySelectorAll("[data-share]").forEach(channel=>{
+      const act=actions[channel.dataset.share];
+      if(!act)return;
+      channel.addEventListener("click",()=>{
+        act(channel);
+        if(channel.dataset.share!=="copy")setOpen(false);
+      });
+    });
+    pairs.push({b,menu,setOpen});
+  });
+  document.addEventListener("click",e=>{
+    pairs.forEach(({b,menu,setOpen})=>{
+      if(menu.classList.contains("open")&&!menu.contains(e.target)&&!b.contains(e.target))setOpen(false);
+    });
+  });
+  document.addEventListener("keydown",e=>{
+    if(e.key!=="Escape")return;
+    pairs.forEach(({b,menu,setOpen})=>{
+      if(menu.classList.contains("open")){setOpen(false);b.focus();}
+    });
+  });
+  /* floating share — slides in once the hero has scrolled away */
+  const hero=$(".hero"),floatWrap=$(".float-share");
+  if(hero&&floatWrap){
+    const update=()=>{
+      floatWrap.classList.toggle("show",hero.getBoundingClientRect().bottom<innerHeight*.4);
+    };
+    update();
+    addEventListener("scroll",update,{passive:true});
+    addEventListener("resize",update);
+  }
+})();
 
 })();

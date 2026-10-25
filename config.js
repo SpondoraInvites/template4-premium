@@ -92,6 +92,17 @@ const INVITE_CONFIG = {
     prodid: "Rafi weds Tahmina",
   },
 
+  /* ---------- Sharing (no backend) ----------
+     The "Share this invitation" button (Venue section) and the
+     floating share button (bottom-right, appears after the hero
+     scrolls away) open a pill menu: Copy link / WhatsApp /
+     Messenger / Telegram / email. "message" is the pre-filled
+     text sent alongside the link (the link itself is the page
+     URL, so this works unchanged once the site is deployed).  */
+  share: {
+    message: "Rafi weds Tahmina — the Nikah is on Friday, 20 November 2026, 11:00 AM, and the Walima on Saturday, 21 November 2026, 7:00 PM, In shaa Allah — you are invited!",
+  },
+
   /* ---------- RSVP ----------
      Replies are remembered in the guest's own browser
      (localStorage) so a returning guest can update their reply.
